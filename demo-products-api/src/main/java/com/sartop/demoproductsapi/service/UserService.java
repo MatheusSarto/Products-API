@@ -8,13 +8,15 @@ import com.sartop.demoproductsapi.exception.WrongPasswordException;
 import com.sartop.demoproductsapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Service
+
 @RequiredArgsConstructor
+@Service
 public class UserService
 {
     @Transactional
@@ -22,6 +24,7 @@ public class UserService
     {
         try
         {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             return userRepository.save(user);
         }
         catch (DataIntegrityViolationException exception)
@@ -48,12 +51,12 @@ public class UserService
         }
 
         UserEntity user = getById(id);
-        if(!user.getPassword().equals(currentPassowrd))
+        if(passwordEncoder.matches(currentPassowrd, user.getPassword()))
         {
             throw new WrongPasswordException("Wrong Current Password ");
         }
 
-        user.setPassword(newPassword);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return user;
     }
 
@@ -64,5 +67,22 @@ public class UserService
         return users;
     }
 
+    @Transactional(readOnly = true)
+    public UserEntity getByUsername(String username)
+    {
+        return userRepository.findByUsername(username).orElseThrow(
+                () -> new EntityNotFoundException(String.format("User {%s} not found", username))
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public UserEntity.Role getRoleByUsername(String username)
+    {
+        return userRepository.findRoleByUsername(username).orElseThrow(
+                () -> new EntityNotFoundException(String.format("User {%s} not found", username))
+        );
+    }
+
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 }
