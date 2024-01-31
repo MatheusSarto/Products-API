@@ -19,6 +19,9 @@ import java.util.List;
 @Service
 public class UserService
 {
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
     @Transactional
     public UserEntity save(UserEntity user)
     {
@@ -83,6 +86,5 @@ public class UserService
         );
     }
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+
 }

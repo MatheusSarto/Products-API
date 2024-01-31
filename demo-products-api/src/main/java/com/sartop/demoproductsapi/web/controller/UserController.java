@@ -37,7 +37,7 @@ public class UserController
                         schema = @Schema(implementation = ErrorMessage.class))),
             }
     )
-    @PostMapping("")
+    @PostMapping()
     public ResponseEntity<UserResponseDto> create(@Valid @RequestBody UserCreateDto userdto)
     {
         UserEntity user = userService.save(UserMapper.toUser(userdto));
