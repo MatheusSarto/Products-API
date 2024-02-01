@@ -34,7 +34,7 @@ public class JwtUtils
                 .setIssuedAt(issuedAt)
                 .setExpiration(limit)
                 .signWith(generateKey(), SignatureAlgorithm.HS256)
-                .claim("userRole", role)
+                .claim("role", role)
                 .compact();
 
         return new JwtToken(token);
@@ -50,9 +50,11 @@ public class JwtUtils
     {
         try
         {
+            log.info("checking if token is valid");
             Jwts.parserBuilder()
                     .setSigningKey(generateKey()).build()
                     .parseClaimsJws(refactorToken(token));
+
             return true;
         }
         catch (JwtException exception)

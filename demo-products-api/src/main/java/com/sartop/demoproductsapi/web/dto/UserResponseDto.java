@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor @AllArgsConstructor
 public class UserResponseDto
 {
-    private String Id;
-    private String Username;
-    private String UserRole;
+    private String id;
+    private String username;
+    private String role;
 }

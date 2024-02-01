@@ -2,7 +2,7 @@ package com.sartop.demoproductsapi.web.exception;
 
 import com.sartop.demoproductsapi.exception.EntityNotFoundException;
 import com.sartop.demoproductsapi.exception.UserAlreadyExistsException;
-import com.sartop.demoproductsapi.exception.WrongPasswordException;
+import com.sartop.demoproductsapi.exception.WrongCredentialsException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -12,7 +12,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.dao.DataIntegrityViolationException;
 
 @Slf4j
 @RestControllerAdvice
@@ -41,7 +40,7 @@ public class ApiExceptionHandler
                 .body(new ErrorMessage(request, HttpStatus.CONFLICT, exception.getMessage()));
     }
 
-    @ExceptionHandler(WrongPasswordException.class)
+    @ExceptionHandler(WrongCredentialsException.class)
     public ResponseEntity<ErrorMessage> WrongCredentials(RuntimeException exception, HttpServletRequest request)
     {
         log.error("API ERROR - ", exception);

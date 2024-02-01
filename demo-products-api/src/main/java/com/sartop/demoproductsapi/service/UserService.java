@@ -4,9 +4,10 @@ package com.sartop.demoproductsapi.service;
 import com.sartop.demoproductsapi.entity.UserEntity;
 import com.sartop.demoproductsapi.exception.EntityNotFoundException;
 import com.sartop.demoproductsapi.exception.UserAlreadyExistsException;
-import com.sartop.demoproductsapi.exception.WrongPasswordException;
+import com.sartop.demoproductsapi.exception.WrongCredentialsException;
 import com.sartop.demoproductsapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class UserService
@@ -50,13 +51,14 @@ public class UserService
     {
         if(!newPassword.equals(confirmPassword))
         {
-            throw new WrongPasswordException("New Password doesn't match with confirm Password");
+            throw new WrongCredentialsException("New Password doesn't match with confirm Password");
         }
 
         UserEntity user = getById(id);
         if(passwordEncoder.matches(currentPassowrd, user.getPassword()))
         {
-            throw new WrongPasswordException("Wrong Current Password ");
+            log.error("Current password\n " + passwordEncoder.encode(currentPassowrd) + "\ndatabase password\n " + user.getPassword());
+            throw new WrongCredentialsException("Wrong Current Password ");
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));

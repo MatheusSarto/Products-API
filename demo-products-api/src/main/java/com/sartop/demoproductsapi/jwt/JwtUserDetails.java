@@ -9,7 +9,7 @@ public class JwtUserDetails extends User
 
     public JwtUserDetails(UserEntity user)
     {
-        super(user.getUsername(), user.getPassword(), AuthorityUtils.createAuthorityList(user.getUserRole().name()));
+        super(user.getUsername(), user.getPassword(), AuthorityUtils.createAuthorityList(user.getRole().name()));
         this.User = user;
     }
 
@@ -20,7 +20,7 @@ public class JwtUserDetails extends User
 
     public String getRole()
     {
-        return this.User.getUserRole().name();
+        return this.User.getRole().name();
     }
 
     private UserEntity User;

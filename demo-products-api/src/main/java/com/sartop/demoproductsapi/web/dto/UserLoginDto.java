@@ -12,8 +12,8 @@ public class UserLoginDto
 {
     @NotBlank
     @Email(regexp = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$", message = "Invalid email format")
-    private String Username;
+    private String username;
     @NotBlank
     @Size(min = 6)
-    private String Password;
+    private String password;
 }

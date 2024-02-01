@@ -1,6 +1,7 @@
 package com.sartop.demoproductsapi.jwt;
 
 import com.sartop.demoproductsapi.entity.UserEntity;
+import com.sartop.demoproductsapi.exception.WrongCredentialsException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +25,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String token = request.getHeader(JwtUtils.JWT_AUTHORIZATION);
-        if(token == null || token.startsWith(JwtUtils.JWT_BEARER))
+        if(token == null || !token.startsWith(JwtUtils.JWT_BEARER))
         {
             filterChain.doFilter(request, response);
             return;

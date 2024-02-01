@@ -18,12 +18,12 @@ public class UserMapper
 
     public static UserResponseDto toDto(UserEntity user)
     {
-        String role = user.getUserRole().name().substring("ROLE_".length());
+        String role = user.getRole().name().substring("ROLE_".length());
 
         PropertyMap<UserEntity, UserResponseDto> props = new PropertyMap<UserEntity, UserResponseDto>() {
             @Override
             protected void configure() {
-                map().setUserRole(role);
+                map().setRole(role);
             }
         };
         ModelMapper mapper = new ModelMapper();
