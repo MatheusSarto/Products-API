@@ -9,6 +9,7 @@ import com.sartop.demoproductsapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,7 +66,7 @@ public class UserService
         return user;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<UserEntity> getAll()
     {
         List<UserEntity> users = userRepository.findAll();

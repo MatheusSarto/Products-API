@@ -11,12 +11,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,14 +47,18 @@ public class UserController
     }
 
     @Operation(summary = "Gets user by id", description = "Gets user by id",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Retrieved user successfully", content = @Content(mediaType="application/json",
                             schema = @Schema(implementation = UserResponseDto.class))),
+                    @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content(mediaType="application/json",
+                            schema = @Schema(implementation = ErrorMessage.class))),
                     @ApiResponse(responseCode = "404", description = "User not found", content = @Content(mediaType="application/json",
                             schema = @Schema(implementation = ErrorMessage.class))),
             }
     )
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') OR (hasRole('CLIENT') AND #id == authentication.principal.id)")
     public ResponseEntity<UserResponseDto> getUser(@PathVariable long id)
     {
         UserEntity user = userService.getById(id);
@@ -60,12 +66,16 @@ public class UserController
     }
 
     @Operation(summary = "Gets a list of all users", description = "Gets a list of all users",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Retrieved user successfully", content = @Content(mediaType="application/json",
                             schema = @Schema(implementation = UserResponseDto.class))),
+                    @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content(mediaType="application/json",
+                            schema = @Schema(implementation = ErrorMessage.class))),
             }
     )
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserResponseDto>> getAll()
     {
         List<UserEntity> users = userService.getAll();
@@ -73,14 +83,20 @@ public class UserController
     }
 
     @Operation(summary = "Updates user password", description = "Updates user password",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "204", description = "User password updated successfully", content = @Content(mediaType="application/json",
                             schema = @Schema(implementation = Void.class))),
+                    @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content(mediaType="application/json",
+                            schema = @Schema(implementation = ErrorMessage.class))),
                     @ApiResponse(responseCode = "409", description = "Wrong Credentials", content = @Content(mediaType="application/json",
+                            schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "422", description = "Invalid Fields", content = @Content(mediaType="application/json",
                             schema = @Schema(implementation = ErrorMessage.class))),
             }
     )
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CLIENT') AND (#id == authentication.principal.id)")
     public ResponseEntity<Void> updatePassword(@Valid @RequestBody UserPasswordDto passwordDto, @PathVariable long id)
     {
         UserEntity updatedUser = userService.updatePassword(passwordDto.getCurrentPassword(), passwordDto.getNewPassword(),

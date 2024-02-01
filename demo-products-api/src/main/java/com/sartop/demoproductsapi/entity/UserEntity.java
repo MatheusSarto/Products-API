@@ -31,7 +31,7 @@ public class UserEntity implements Serializable
     private String name;
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false, length = 25)
-    private Role role = Role.ROLE_ADMIN;
+    private Role role = Role.ROLE_CLIENT;
 
     @CreatedDate
     @Column(name = "creationDate")
