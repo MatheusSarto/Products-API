@@ -21,7 +21,7 @@ public class JwtUtils
     public static final String SECRET_KEY = "123123123123123123123123123123123123";
     public static final long EXPIRE_DAYS = 0;
     public static final long EXPIRE_HOURS = 0;
-    public static final long EXPIRE_MINUTES = 5;
+    public static final long EXPIRE_MINUTES = 30;
 
     public static JwtToken createToken(String username, String role)
     {
