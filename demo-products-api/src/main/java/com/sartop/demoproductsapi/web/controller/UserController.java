@@ -33,7 +33,7 @@ public class UserController
             responses = {
                 @ApiResponse(responseCode = "201", description = "User created successfully", content = @Content(mediaType="application/json",
                         schema = @Schema(implementation = UserResponseDto.class))),
-                @ApiResponse(responseCode = "209", description = "User already exits", content = @Content(mediaType="application/json",
+                @ApiResponse(responseCode = "409", description = "User already exits", content = @Content(mediaType="application/json",
                         schema = @Schema(implementation = ErrorMessage.class))),
                 @ApiResponse(responseCode = "422", description = "Unprocessable entity", content = @Content(mediaType="application/json",
                         schema = @Schema(implementation = ErrorMessage.class))),
@@ -78,6 +78,7 @@ public class UserController
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserResponseDto>> getAll()
     {
+        // TODO MAKE GET ALL METHOD USE PAGES
         List<UserEntity> users = userService.getAll();
         return ResponseEntity.status(HttpStatus.OK).body(UserMapper.toListDto(users));
     }
