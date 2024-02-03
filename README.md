@@ -1,3 +1,26 @@
 SPRING BOOT - PRODUCTS API
 
-Uma api criada para demonstrar conhecimentos teóricos referentes a Spring, JAVA, MVC e padrões de projeto. A RESTFUL API em questão tem até o momento funcionalidades de autenticação, auditoria, tratamento de exceções e tratamento personalizado por tipos de usuários.
+Motivo da criação da API:
+  Demonstração de conhecimentos práticos em programação utilizando JAVA e criação de API's.
+
+Tecnologias usadas:
+- JAVA 11
+- SpringBoot
+
+Conhecimentos aplicados:
+- MVC
+- Conceito de DTOs e respostas condizentes da API a clientes
+- Padrões de Projeto
+- Arquitetura REST
+- Clean Code
+
+Funcionalidades atuais da API:
+- Segurança e Autenticação ( validando Roles ) via SpringSecurity
+- Sistema de permições a utorizações criado apartir do uso de um Bearer Token, enviado nas requisições e validado na API
+- Sistema respostas apropriadas do servidor a clientes, em caso de erros exceções personalizadas são devolvidas ao cliente, deixando a resposta mais agrádavel e expondo menos informações internas da API
+
+- Cadastro de um usuário
+- Alteração de senha de um usuário
+- Consulta de usuário 
+
+- Cadastro de um cliente, que é criado apartir das informações de um usuário, formando assim, na base de dados, uma relação 1 para 1 entre cliente e usuário
