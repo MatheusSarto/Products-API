@@ -1,5 +1,6 @@
 package com.sartop.demoproductsapi.service;
 
+import com.sartop.demoproductsapi.entity.ClientEntity;
 import com.sartop.demoproductsapi.entity.ProductEntity;
 import com.sartop.demoproductsapi.exception.CodeUniqueViolationException;
 import com.sartop.demoproductsapi.exception.EntityNotFoundException;
@@ -26,20 +27,21 @@ public class ProductService
         }
         catch (DataIntegrityViolationException exception)
         {
-            throw new CodeUniqueViolationException(String.format("Product code {%s} already registered", product.getCode()));
+            throw new CodeUniqueViolationException(String.format("Product code {%s} already registered", product.getId()));
         }
     }
 
     @Transactional(readOnly = true)
-    public ProductEntity getByCode(String code)
+    public ProductEntity getById(Long id, ClientEntity client)
     {
-        return productRepository.findByCode(code).orElseThrow(
-                () ->  new EntityNotFoundException(String.format("Product of code {%s} not found", code))
+        return productRepository.findByIdAndClient(id, client).orElseThrow(
+                () ->  new EntityNotFoundException(String.format("Product of code {%s} not found", id))
         );
     }
 
-    public List<ProductEntity> getAll()
+    public List<ProductEntity> getAll(ClientEntity client)
     {
-        return productRepository.findAll();
+        return productRepository.findAllByClient(client);
     }
+
 }

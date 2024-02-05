@@ -1,10 +1,13 @@
 package com.sartop.demoproductsapi.web.controller;
 
 
+import com.sartop.demoproductsapi.entity.ClientEntity;
 import com.sartop.demoproductsapi.entity.ProductEntity;
 import com.sartop.demoproductsapi.entity.UserEntity;
 import com.sartop.demoproductsapi.jwt.JwtUserDetails;
+import com.sartop.demoproductsapi.service.ClientService;
 import com.sartop.demoproductsapi.service.ProductService;
+import com.sartop.demoproductsapi.service.UserService;
 import com.sartop.demoproductsapi.web.dto.ProductCreateDto;
 import com.sartop.demoproductsapi.web.dto.ProductResponseDto;
 import com.sartop.demoproductsapi.web.dto.mapper.ProductMapper;
@@ -18,6 +21,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +33,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+@Slf4j
 @Tag(name = "Products", description = "All product related operations")
 @RequiredArgsConstructor
 @RestController
@@ -36,7 +41,7 @@ import java.util.List;
 public class ProductController
 {
     private final ProductService productService;
-
+    private final ClientService clientService;
 
     @Operation(summary = "Adds a new product", description = "Creates a new product on the database. Bearer Token needed. Restrict to ADMIN.",
             responses = {
@@ -51,16 +56,17 @@ public class ProductController
             }
     )
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('CLIENT')")
     public ResponseEntity<Void> create(@RequestBody @Valid ProductCreateDto dto,
                                        @AuthenticationPrincipal JwtUserDetails userDetails)
     {
         ProductEntity product = ProductMapper.toProduct(dto);
+        product.setClient(clientService.getByIUserId(userDetails.getId()));
         productService.save(product);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequestUri().path("/{code}")
-                .buildAndExpand(product.getCode())
+                .buildAndExpand(product.getId())
                 .toUri();
 
         return ResponseEntity.created(location).build();
@@ -77,11 +83,12 @@ public class ProductController
             }
     )
     @GetMapping("/{code}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ProductResponseDto> getByCode(@PathVariable String code,
+    @PreAuthorize("hasRole('CLIENT')")
+    public ResponseEntity<ProductResponseDto> getById(@PathVariable Long id,
                                                         @AuthenticationPrincipal JwtUserDetails userDetails)
     {
-       ProductEntity product = productService.getByCode(code);
+        ClientEntity client = clientService.getByIUserId(userDetails.getId());
+        ProductEntity product = productService.getById(id, client);
 
         return ResponseEntity.ok(ProductMapper.toDto(product));
     }
@@ -93,11 +100,12 @@ public class ProductController
             }
     )
     @GetMapping()
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('CLIENT')")
     public ResponseEntity<List<ProductResponseDto>> getAll(@AuthenticationPrincipal JwtUserDetails userDetails)
     {
         // TODO MAKE GET ALL METHOD USE PAGES
-        List<ProductEntity> users = productService.getAll();
+        ClientEntity client = clientService.getByIUserId(userDetails.getId());
+        List<ProductEntity> users = productService.getAll(client);
         return ResponseEntity.status(HttpStatus.OK).body(ProductMapper.toListDto(users));
     }
 }

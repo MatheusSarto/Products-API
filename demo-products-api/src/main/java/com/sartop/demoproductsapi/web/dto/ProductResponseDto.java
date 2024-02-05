@@ -11,6 +11,5 @@ import lombok.Setter;
 public class ProductResponseDto
 {
     private Long id;
-    private String code;
     private String status;
 }

@@ -29,8 +29,6 @@ public class ProductEntity implements Serializable
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "code", nullable = false, unique = true)
-    private String code;
     @Column(name = "name", nullable = false)
     private String name;
     @Column(name = "description", nullable = false)
@@ -40,9 +38,13 @@ public class ProductEntity implements Serializable
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private StatusProduct status;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_client", nullable = false)
     private ClientEntity client;
+    @Enumerated(EnumType.STRING)
+    @JoinColumn(name = "cateogry", nullable = false)
+    private ProductCategory category;
+
 
     @Column(name = "forSaleAt")
     private LocalDateTime forSaleAt;
@@ -79,5 +81,12 @@ public class ProductEntity implements Serializable
     {
         ON_STOCK,
         FOR_SALE, SOLD
+    }
+
+    public enum ProductCategory
+    {
+        DAIRY, PRODUCE, FREEZER, SEAFOOD, SNAKCS, BEVERAGE, BAKERY, CONDIMENTS, DELI, MEAT, BAKING, CARE_PRODUCTS,
+        DRIED_GOODS, VEGETABLES, CANNED_FOOD, BREAD, CEREAL, FRUITS, GRAINS, INTERNATIONAL_FOOD, EGGS_AND_DAIRY, FAT_AND_OIL, PROTEIN_FOODS,
+        CLEANING, BABY_ITENS, CLOUTHING, TECHNOLOGIE
     }
 }
