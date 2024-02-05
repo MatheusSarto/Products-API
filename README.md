@@ -2,6 +2,7 @@ SPRING BOOT - PRODUCTS API
 
 Motivo da criação da API:
   Demonstração de conhecimentos práticos em programação utilizando JAVA e criação de API's.
+  A Base de dados da API foi modelada de forma simples, visando apenas demosntração de funcionamento e conceitos fundamentais ao desenvolver uma API REST utilizando o framework SpringBoot. Sendo assim estou ciente que a base de dados poderia ser otimizada criando uma relação mais complexa de tabelas, mas esse não é o foco do projeto.
 
 Tecnologias usadas:
 - JAVA 11
