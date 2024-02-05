@@ -10,7 +10,7 @@ import org.hibernate.validator.constraints.br.CPF;
 
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
-public class ClientCreatDto
+public class ClientCreateDto
 {
     @NotBlank
     @Size(min = 5, max = 100)

@@ -5,7 +5,7 @@ import com.sartop.demoproductsapi.jwt.JwtUserDetails;
 import com.sartop.demoproductsapi.repository.projection.ClientProjection;
 import com.sartop.demoproductsapi.service.ClientService;
 import com.sartop.demoproductsapi.service.UserService;
-import com.sartop.demoproductsapi.web.dto.ClientCreatDto;
+import com.sartop.demoproductsapi.web.dto.ClientCreateDto;
 import com.sartop.demoproductsapi.web.dto.ClientResponseDto;
 import com.sartop.demoproductsapi.web.dto.PageableDto;
 import com.sartop.demoproductsapi.web.dto.UserResponseDto;
@@ -22,7 +22,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -30,8 +29,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Tag(name = "Clients", description = "All client related operations")
 @RequiredArgsConstructor
@@ -56,7 +53,7 @@ public class ClientCotroller
     )
     @PostMapping
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<ClientResponseDto> create(@RequestBody @Valid ClientCreatDto dto,
+    public ResponseEntity<ClientResponseDto> create(@RequestBody @Valid ClientCreateDto dto,
                                                     @AuthenticationPrincipal JwtUserDetails userDetails)
     {
         ClientEntity client = ClientMapper.toClient(dto);

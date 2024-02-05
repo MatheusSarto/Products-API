@@ -1,9 +1,6 @@
 package com.sartop.demoproductsapi.web.exception;
 
-import com.sartop.demoproductsapi.exception.ClientAlreadyExistsException;
-import com.sartop.demoproductsapi.exception.EntityNotFoundException;
-import com.sartop.demoproductsapi.exception.UserAlreadyExistsException;
-import com.sartop.demoproductsapi.exception.WrongCredentialsException;
+import com.sartop.demoproductsapi.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -31,7 +28,7 @@ public class ApiExceptionHandler
                 .body(new ErrorMessage(request, HttpStatus.UNPROCESSABLE_ENTITY, "Invalid Fields.", result));
     }
 
-    @ExceptionHandler({UserAlreadyExistsException.class, ClientAlreadyExistsException.class})
+    @ExceptionHandler({UserAlreadyExistsException.class, ClientAlreadyExistsException.class, CodeUniqueViolationException.class})
     public ResponseEntity<ErrorMessage> UniqueViolationException(RuntimeException exception, HttpServletRequest request)
     {
         log.error("API ERROR - ", exception);

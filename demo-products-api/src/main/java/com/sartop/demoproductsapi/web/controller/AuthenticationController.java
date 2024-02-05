@@ -5,6 +5,7 @@ import com.sartop.demoproductsapi.jwt.JwtUserDetails;
 import com.sartop.demoproductsapi.jwt.JwtUserDetailsService;
 import com.sartop.demoproductsapi.web.dto.UserLoginDto;
 import com.sartop.demoproductsapi.web.exception.ErrorMessage;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "Authentication", description = "All authentication related operations")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1")
