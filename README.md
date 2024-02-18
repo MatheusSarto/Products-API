@@ -17,7 +17,7 @@ Conhecimentos aplicados:
 - Arquitetura REST
 - Clean Code
 
-Funcionalidades atuais da API:
+Funcionalidades da API:
 - ADENDO: As funcionalidades da API funcionam apenas por USUÁRIO, não por grupo de usuários.
 
 - Segurança e Autenticação ( validando Roles ) via SpringSecurity
