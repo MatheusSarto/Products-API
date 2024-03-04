@@ -39,7 +39,8 @@ public class ClientCotroller
     private final ClientService clientService;
     private final UserService userService;
 
-    @Operation(summary = "Creates a new client", description = "Creates a new client linked to an existing client. Token Required. Access restricted to users of role CLIENT",
+    @Operation(summary = "Creates a new client", description = "Creates a new client linked to an existing user. Token Required. Access restricted to users of role CLIENT",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "201", description = "Client created successfully", content = @Content(mediaType="application/json",
                             schema = @Schema(implementation = UserResponseDto.class))),

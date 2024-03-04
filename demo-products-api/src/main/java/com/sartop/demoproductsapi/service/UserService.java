@@ -6,6 +6,7 @@ import com.sartop.demoproductsapi.exception.EntityNotFoundException;
 import com.sartop.demoproductsapi.exception.UserAlreadyExistsException;
 import com.sartop.demoproductsapi.exception.WrongCredentialsException;
 import com.sartop.demoproductsapi.repository.UserRepository;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -76,17 +77,28 @@ public class UserService
     @Transactional(readOnly = true)
     public UserEntity getByUsername(String username)
     {
-        return userRepository.findByUsername(username).orElseThrow(
-                () -> new EntityNotFoundException(String.format("User {%s} not found", username))
-        );
+        try
+        {
+            return userRepository.findByUsername(username);
+        }
+        catch(Exception e)
+        {
+            throw new EntityNotFoundException(String.format("User {%s} not found", username));
+        }
+
     }
 
     @Transactional(readOnly = true)
     public UserEntity.Role getRoleByUsername(String username)
     {
-        return userRepository.findRoleByUsername(username).orElseThrow(
-                () -> new EntityNotFoundException(String.format("User {%s} not found", username))
-        );
+        try
+        {
+            return userRepository.findRoleByUsername(username);
+        }
+        catch (Exception e)
+        {
+            throw new EntityNotFoundException(String.format("User {%s} not found", username));
+        }
     }
 
 
